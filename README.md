@@ -28,12 +28,12 @@ Usage:
 nodejs app.js [ port ]
 
 #### Testing the Server in AWS
-* curl --request GET http://*hostname:port*/
-* curl --request GET http://*hostname:port*/vrsverify/?vrsnum=1000
-* curl --request GET http://*hostname:port*/getallvrsrecs
-* curl -H "Content-Type: application/json" -X PUT -d '{"vrsnum":"1000","fieldname":"last_name","fieldvalue":"Spacey"}'  http://*hostname:port*/vrsupdate
-* curl -H "Content-Type: application/json" -X PUT -d '{"username":"<omitted>","password":"<omitted>","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' http://*hostname:port*/addVrsRec
-* curl -H "Content-Type: application/json" -X POST -d '{"vrs": "7032607288", "password": "<omitted>", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' http://*hostname:port*/updateVrsRec
+* curl -k --request GET https://*hostname:port*/
+* curl -k --request GET https://*hostname:port*/vrsverify/?vrsnum=1000
+* curl -k --request GET https://*hostname:port*/getallvrsrecs
+* curl -k -H "Content-Type: application/json" -X PUT -d '{"vrsnum":"1000","fieldname":"last_name","fieldvalue":"Spacey"}'  https://*hostname:port*/vrsupdate
+* curl -k -H "Content-Type: application/json" -X PUT -d '{"username":"<omitted>","password":"<omitted>","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' https://*hostname:port*/addVrsRec
+* curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "7032607288", "password": "<omitted>", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' https://*hostname:port*/updateVrsRec
 # SERVICE API
 
 ----
@@ -90,7 +90,7 @@ nodejs app.js [ port ]
 
 * **Sample Call:**
 
-  http://*hostname:port*/vrsverify/?vrsnum=1000
+  https://*hostname:port*/vrsverify/?vrsnum=1000
 
 * **Notes:**
 
@@ -133,7 +133,7 @@ nodejs app.js [ port ]
 
 * **Sample Call:**
 
-  http://*hostname:port*/getallvrsrecs
+  https://*hostname:port*/getallvrsrecs
 
 * **Notes:**
 
@@ -179,7 +179,7 @@ _This is just a test service to quickly check the connection._
 
 * **Sample Call:**
 
-  http://*hostname:port*/
+  https://*hostname:port*/
 
 * **Notes:**
 
@@ -234,7 +234,7 @@ _Add a new VRS record in the user database._
 
   * **Sample Call:**
 
-   curl -H "Content-Type: application/json" -X PUT -d '{"username":"<omitted>","password":"<omitted>","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' http://*hostname:port*/addVrsRec
+   curl -k -H "Content-Type: application/json" -X PUT -d '{"username":"<omitted>","password":"<omitted>","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' https://*hostname:port*/addVrsRec
 
   * **Notes:**
 
@@ -290,7 +290,7 @@ _Update a VRS record in the user database._
 
   * **Sample Call:**
 
- curl -H "Content-Type: application/json" -X POST -d '{"vrs": "7032607288", "password": "<omitted>", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' http://*hostname:port*/updateVrsRec
+ curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "7032607288", "password": "<omitted>", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' https://*hostname:port*/updateVrsRec
 
   * **Notes:**
 
@@ -324,7 +324,7 @@ _Get a user record from the VRS database._
 
   * **Sample Call:**
 
-  https://hostname:port/getuserinfo?username=someuser
+  curl -k --request GET https://*hostname:port*/getuserinfo?username=someuser
  
 
   * **Notes:**
