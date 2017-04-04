@@ -134,6 +134,69 @@ var appRouter = function(app,connection, mysql) {
     });
   });
 
+    /**
+    * @api {get} /getuserinfo Gets user info (minus username and password) for a given username
+    * @apiName Get User Info
+    * @apiGroup GetUserInfo
+    * @apiVersion 1.0.0
+    *
+    * @apiSuccessExample 200 Success-Response
+    *     HTTP/1.1 200 OK
+    *   {
+    *     "message": "success",
+    *     "data": [
+    *       {
+    *         "vrs": 0,
+    *         "first_name": "First",
+    *         "last_name": "Last",
+    *         "address": "1 Some Street",
+    *         "city": "Some City",
+    *         "state": "XX",
+    *         "zip_code": "00000",
+    *         "email": "someuser@mail.com",
+    *         "isAdmin": 0
+    *       }
+    *     ]
+    *   }
+    *
+    * @apiSuccessExample 200 Success-Response
+    *     HTTP/1.1 200 OK
+    *   {
+    *     "message": "record not found"
+    *   }
+    *
+    * @apiSuccessExample 400 Error-Response
+    *     HTTP/1.1 400 Bad Request
+    *   {
+    *     "message": "missing username"
+    *   }
+    *
+    * @apiErrorExample 500 Error-Response
+    *     HTTP/1.1 500 Internal Server Error
+    *     {
+    *        "message": "mysql error"
+    *     }
+    */
+    //e.g. https://host:nnnn/getuserinfo?username=someusername
+    app.get('/getuserinfo', function(req, res) {
+    //get user info for a single user; do not send username or password back
+    if (!req.query.username) {
+      return res.status(400).send({'message': 'missing username'});
+    }
+    connection.query('select vrs,first_name,last_name,address,city,state,zip_code,email,isAdmin from user_data where username = ?', req.query.username, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send({'message': 'mysql error'});
+        } else if (rows.length > 0) {
+            //success
+            json = JSON.stringify(rows);
+            res.status(200).send({'message': 'success', 'data':rows});
+        } else if (rows.length === 0) {
+            return res.status(200).send({'message': 'record not found'});
+        }
+    });
+    });
+
   /**
   * Get to show server is running. This will not show if APIDoc is run.
   */

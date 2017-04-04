@@ -38,7 +38,7 @@ nodejs app.js [ port ]
 
 ----
 
-#vrsverify
+# vrsverify
 
   _Verify a VRS number._
 
@@ -97,7 +97,7 @@ nodejs app.js [ port ]
   _None._
 
 ----
-#getallvrsrecs
+# getallvrsrecs
 
   _Get all the VRS records in the user database._
 
@@ -141,7 +141,7 @@ nodejs app.js [ port ]
 
 ----
 
-##Test Service
+# Test Service
 
 _This is just a test service to quickly check the connection._
 
@@ -187,7 +187,7 @@ _This is just a test service to quickly check the connection._
 
 ----
 
-##addVrsRec
+# addVrsRec
 
 _Add a new VRS record in the user database._
 
@@ -243,7 +243,7 @@ _Add a new VRS record in the user database._
 
 ----
 
-##updateVrsRec
+# updateVrsRec
 
 _Update a VRS record in the user database._
 
@@ -295,3 +295,38 @@ _Update a VRS record in the user database._
   * **Notes:**
 
     _None._
+
+# getuserinfo
+
+_Get a user record from the VRS database._
+
+  * **URL**
+
+    _/getuserinfo_
+
+  * **Method:**
+
+     `GET`
+
+  *  **URL Params**
+
+     **Required:**
+
+     _username_
+
+  * **Success Response:**
+
+    * **Code:** 200, **Content:** `{ "message": "success", "data": [ { "vrs": 0, "first_name": "First", "last_name": "Last", "address": "1 Some Street", "city": "Some City", "state": "XX", "zip_code": "00000", "email": "someuser@mail.com", "isAdmin": 0 } ]}`
+
+  * **Error Response:**
+    * **Code:** 400 BAD REQUEST, **Content:** `{'message':'missing username'}`
+    * **Code:** 500 INTERNAL SERVER ERROR, **Content:** `{'message': 'mysql error'}`
+
+  * **Sample Call:**
+
+  https://hostname:port/getuserinfo?username=someuser
+ 
+
+  * **Notes:**
+
+    _None._ 
