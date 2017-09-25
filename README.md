@@ -13,7 +13,7 @@ USERVER is a server that provides a RESTful Web Service API to the ACE database 
 1. Additional information can be found in the ACE Direct Platform Release document
 
 ### Getting Started
-
+To install userver, follow the README.md file in the autoinstall folder. The instructions for manual install are also provided below for reference.
 1. Clone this repository
 1. Download and install [Node.js](https://nodejs.org/en/)
 1. Install the required Node.js modules: cd into the userver directory, run `npm install`
