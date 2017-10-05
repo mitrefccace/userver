@@ -2,9 +2,9 @@
 
 # ACE USERVER Project
 
-USERVER is a server that provides a RESTful Web Service API to the ACE database for user information.
+The ACE USERVER is a server that provides a RESTful Web Service API to the ACE database for user information.
 
-#### Note: Data in this README are fake. Data are included here for documentation purposes only.
+#### Note: Data in this README is fake. Data included here is for documentation purposes only.
 
 ### SSL Configuration
 
@@ -42,7 +42,7 @@ To install userver, follow the README.md file in the autoinstall folder. The ins
 | https:private_key | The path to the SSL private key |
 | redis:host | The IP address of the Redis server |
 | redis:port | The port number of the Redis server |  
-    
+
 #### Running the Server
 
 Usage: nodejs app.js [ port ]
@@ -86,9 +86,9 @@ _None_
 
 ### Success Response
 
-Code: 200 
+Code: 200
 
-Content: 
+Content:
 
 ```
 {
@@ -298,7 +298,7 @@ Code: 200, Content: `{"message":"success"}`
 ### Error Response
 
 Code: 400 BAD REQUEST, Content: `{"message":"Missing required field(s)"}`
-    
+
 Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
 ### Sample Call
