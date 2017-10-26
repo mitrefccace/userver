@@ -58,7 +58,7 @@ var appRouter = function(app,connection, mysql) {
 */
   app.get('/vrsverify', function(req, res) {
     if (!req.query.vrsnum) {
-      return res.status(400).send({'message': 'missing vrsnum'});
+      return res.status(400).send({'message': 'missing video phone number'});
     } else {
       //Query DB for vrs number
       connection.query('SELECT * FROM user_data WHERE vrs = ?',req.query.vrsnum , function(err, rows, fields) {
@@ -70,7 +70,7 @@ var appRouter = function(app,connection, mysql) {
           json = JSON.stringify(rows);
           res.status(200).send({'message': 'success', 'data':rows});
         } else if (rows.length === 0) {
-          return res.status(404).send({'message': 'vrs number not found'});
+          return res.status(404).send({'message': 'Videophone number not found'});
         } else {
           console.log('error - records returned is ' + rows.length);
           return res.status(501).send({'message': 'records returned is not 1'});
@@ -129,7 +129,7 @@ var appRouter = function(app,connection, mysql) {
         json = JSON.stringify(rows);
         res.status(200).send({'message': 'success', 'data':rows});
       } else if (rows.length === 0) {
-        return res.status(204).send({'message': 'no vrs records'});
+        return res.status(204).send({'message': 'no video phone records'});
       }
     });
   });
@@ -201,7 +201,7 @@ var appRouter = function(app,connection, mysql) {
   * Get to show server is running. This will not show if APIDoc is run.
   */
   app.get('/', function(req, res) {
-    return res.status(200).send({'message': 'Welcome to the VRS verification portal.'});
+    return res.status(200).send({'message': 'Welcome to the Videophone verification portal.'});
   });
 
   /**
