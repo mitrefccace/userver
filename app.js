@@ -36,10 +36,13 @@ try {
 	var myjson = JSON.parse(content);
 	console.log("Valid JSON config file");
 } catch (ex) {
-	console.log("Error in " + cfile);
-	console.log('Exiting...');
-	console.log(ex);
-	process.exit(1);
+    console.log("");
+    console.log("*******************************************************");
+    console.log("Error! Malformed configuration file: " + cfile);
+    console.log('Exiting...');
+    console.log("*******************************************************");
+    console.log("");
+    process.exit(1);
 }
 
 var logger = log4js.getLogger(logname);
@@ -56,7 +59,7 @@ if (typeof(nconf.get('common:cleartext')) !== "undefined"  && nconf.get('common:
 }
 
 // Set log4js level from the config file
-logger.setLevel(decodeBase64(nconf.get('common:debug_level')));
+logger.setLevel(getConfigVal('common:debug_level'));
 logger.trace('TRACE messages enabled.');
 logger.debug('DEBUG messages enabled.');
 logger.info('INFO messages enabled.');
@@ -67,8 +70,8 @@ logger.info('Using config file: ' + cfile);
 
 
 var credentials = {
-	key: fs.readFileSync(decodeBase64(nconf.get('common:https:private_key'))),
-	cert: fs.readFileSync(decodeBase64(nconf.get('common:https:certificate')))
+	key: fs.readFileSync(getConfigVal('common:https:private_key')),
+	cert: fs.readFileSync(getConfigVal('common:https:certificate'))
 };
 
 // process arguments - user supplied port number?
@@ -85,10 +88,10 @@ clear(); // clear console
 
 // Create MySQL connection and connect to it
 var connection = mysql.createConnection({
-  host     : decodeBase64(nconf.get('database_servers:mysql:host')),
-  user     : decodeBase64(nconf.get('database_servers:mysql:user')),
-  password : decodeBase64(nconf.get('database_servers:mysql:password')),
-  database : decodeBase64(nconf.get('database_servers:mysql:ad_database_name'))
+  host     : getConfigVal('database_servers:mysql:host'),
+  user     : getConfigVal('database_servers:mysql:user'),
+  password : getConfigVal('database_servers:mysql:password'),
+  database : getConfigVal('database_servers:mysql:ad_database_name')
 });
 connection.connect();
 // Keeps connection from Inactivity Timeout
@@ -104,8 +107,8 @@ app.use(bodyParser.json({type: 'application/vnd/api+json'}));
 
 var routes = require('./routes/routes.js')(app,connection);
 var httpsServer = https.createServer(credentials,app);
-httpsServer.listen(parseInt(decodeBase64(nconf.get('user_service:port'))));
-console.log('https web server for agent portal up and running on port=%s   (Ctrl+C to Quit)', parseInt(decodeBase64(nconf.get('user_service:port'))));
+httpsServer.listen(parseInt(getConfigVal('user_service:port')));
+console.log('https web server for agent portal up and running on port=%s   (Ctrl+C to Quit)', parseInt(getConfigVal('user_service:port')));
 
 
 // Handle Ctrl-C (graceful shutdown)
@@ -116,16 +119,29 @@ process.on('SIGINT', function() {
 });
 
 /**
- * Function to decode the Base64 configuration file parameters.
- * @param {type} encodedString Base64 encoded string.
+ * Function to verify the config parameter name and
+ * decode it from Base64 (if necessary).
+ * @param {type} param_name of the config parameter
  * @returns {unresolved} Decoded readable string.
  */
-function decodeBase64(encodedString) {
+function getConfigVal(param_name) {
+  var val = nconf.get(param_name);
+  if (typeof val !== 'undefined' && val !== null) {
+    //found value for param_name
     var decodedString = null;
     if (clearText) {
-        decodedString = encodedString;
+      decodedString = val;
     } else {
-        decodedString = new Buffer(encodedString, 'base64');
+      decodedString = new Buffer(val, 'base64');
     }
-    return (decodedString.toString());
+  } else {
+    //did not find value for param_name
+    logger.error('');
+    logger.error('*******************************************************');
+    logger.error('ERROR!!! Config parameter is missing: ' + param_name);
+    logger.error('*******************************************************');
+    logger.error('');
+    decodedString = "";
+  }
+  return (decodedString.toString());
 }
