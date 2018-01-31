@@ -61,22 +61,32 @@ var appRouter = function(app,connection,itrsMode) {
     if (!req.query.vrsnum) {
       return res.status(400).send({'message': 'missing video phone number'});
     } else {
-      //Query DB for vrs number
-      connection.query('SELECT * FROM user_data WHERE vrs = ?',req.query.vrsnum , function(err, rows, fields) {
-        if (err) {
-          console.log(err);
-          return res.status(500).send({'message': 'mysql error', 'itrs_mode':itrsMode});
-        } else if (rows.length === 1) {
-          //success
-          json = JSON.stringify(rows);
-          res.status(200).send({'message': 'success', 'data':rows, 'itrs_mode':itrsMode});
-        } else if (rows.length === 0) {
-          return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
-        } else {
-          console.log('error - records returned is ' + rows.length);
-          return res.status(501).send({'message': 'records returned is not 1'});
-        }
-      });
+      if (itrsMode === "false") {
+        //VERIFYING vrs num using our own database
+        console.log('VERIFYING vrs num using our own database...');
+        //Query DB for vrs number
+        connection.query('SELECT * FROM user_data WHERE vrs = ?',req.query.vrsnum , function(err, rows, fields) {
+          if (err) {
+            console.log(err);
+            return res.status(500).send({'message': 'mysql error', 'itrs_mode':itrsMode});
+          } else if (rows.length === 1) {
+            //success
+            json = JSON.stringify(rows);
+            res.status(200).send({'message': 'success', 'data':rows, 'itrs_mode':itrsMode});
+          } else if (rows.length === 0) {
+            return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
+          } else {
+            console.log('error - records returned is ' + rows.length);
+            return res.status(501).send({'message': 'records returned is not 1'});
+          }
+        });
+
+      } else {
+        //verify vrs num using the ITRS service
+        console.log('VERIFYING vrs num using the ITRS service...');
+        var rsp = {"message":"success","data":[{"vrs":req.query.vrsnum,"username":"","password":"","first_name":"","last_name":"","address":"","city":"","state":"","zip_code":"","email":"","isAdmin":0}],"itrs_mode":"true"};
+        res.status(200).send(rsp);
+      }
     }
   });
 
