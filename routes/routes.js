@@ -80,12 +80,29 @@ var appRouter = function(app,connection,itrsMode) {
             return res.status(501).send({'message': 'records returned is not 1'});
           }
         });
-
       } else {
         //verify vrs num using the ITRS service
         console.log('VERIFYING vrs num using the ITRS service...');
-        var rsp = {"message":"success","data":[{"vrs":req.query.vrsnum,"username":"","password":"","first_name":"","last_name":"","address":"","city":"","state":"","zip_code":"","email":"","isAdmin":0}],"itrs_mode":"true"};
-        res.status(200).send(rsp);
+        const exec = require('child_process').exec;
+        var yourscript = exec('sh ~/scripts/itrslookup.sh ' + req.query.vrsnum  + ' simple',
+        (error, stdout, stderr) => {
+          if (error !== null) {
+            console.log('ERROR during itrslookup.sh; exec error: ' + error);
+            console.log('Returning failure for ITRS lookup....');
+            return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
+          }
+          var arr = stdout.split(" ");
+          var rsp = "";
+          if (arr.length == 4 && arr[2] === 'sipuri' && arr[3].trim().length > 0) {
+            //VERIFY SUCCESS
+            console.log('ITRS VERIFIED ' + req.query.vrsnum + ' ? ... YES!');
+            res.status(200).send({"message":"success","data":[{"vrs":req.query.vrsnum,"username":"","password":"","first_name":"","last_name":"","address":"","city":"","state":"","zip_code":"","email":"","isAdmin":0}],"itrs_mode":"true"});
+          } else {
+            //ITRS VERIFY FAIL
+            console.log('ITRS VERIFIED ' + req.query.vrsnum + ' ? ... NO!');
+            return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
+          }
+        });
       }
     }
   });
