@@ -9,6 +9,7 @@ var clear = require('clear');
 var log4js = require('log4js');
 var nconf = require('nconf');
 var cfile = null;
+var itrsMode = "false";
 
 // Initialize log4js
 log4js.loadAppender('file');
@@ -68,6 +69,12 @@ logger.error('ERROR messages enabled.');
 logger.fatal('FATAL messages enabled.');
 logger.info('Using config file: ' + cfile);
 
+//are we using ITRS to verify or our own DB to verify?
+itrsMode = getConfigVal('user_service:itrs_mode');
+if (itrsMode.length == 0) {
+  logger.error('error - user_service:itrs_mode param is missing; defaulting to false');
+  itrsMode = "false";
+}
 
 var credentials = {
 	key: fs.readFileSync(getConfigVal('common:https:private_key')),
@@ -105,7 +112,7 @@ app.use(express.static(__dirname + '/apidoc'));
 app.use(bodyParser.json({type: 'application/vnd/api+json'}));
 
 
-var routes = require('./routes/routes.js')(app,connection);
+var routes = require('./routes/routes.js')(app,connection,itrsMode);
 var httpsServer = https.createServer(credentials,app);
 httpsServer.listen(parseInt(getConfigVal('user_service:port')));
 console.log('https web server for agent portal up and running on port=%s   (Ctrl+C to Quit)', parseInt(getConfigVal('user_service:port')));

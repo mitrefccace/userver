@@ -6,7 +6,7 @@
 * @returns (undefined) Not used
 */
 
-var appRouter = function(app,connection, mysql) {
+var appRouter = function(app,connection,itrsMode) {
 
 
   /**
@@ -57,6 +57,7 @@ var appRouter = function(app,connection, mysql) {
 *     }
 */
   app.get('/vrsverify', function(req, res) {
+    console.log('itrsMode is: ' + itrsMode);
     if (!req.query.vrsnum) {
       return res.status(400).send({'message': 'missing video phone number'});
     } else {
@@ -64,13 +65,13 @@ var appRouter = function(app,connection, mysql) {
       connection.query('SELECT * FROM user_data WHERE vrs = ?',req.query.vrsnum , function(err, rows, fields) {
         if (err) {
           console.log(err);
-          return res.status(500).send({'message': 'mysql error'});
+          return res.status(500).send({'message': 'mysql error', 'itrs_mode':itrsMode});
         } else if (rows.length === 1) {
           //success
           json = JSON.stringify(rows);
-          res.status(200).send({'message': 'success', 'data':rows});
+          res.status(200).send({'message': 'success', 'data':rows, 'itrs_mode':itrsMode});
         } else if (rows.length === 0) {
-          return res.status(404).send({'message': 'Videophone number not found'});
+          return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
         } else {
           console.log('error - records returned is ' + rows.length);
           return res.status(501).send({'message': 'records returned is not 1'});
