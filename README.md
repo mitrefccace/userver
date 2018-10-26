@@ -28,14 +28,14 @@ To install userver, follow the README.md file in the autoinstall folder. The ins
 
 Usage: nodejs app.js [ port ]
 
-#### Testing the Server in AWS
+#### Testing the Server in AWS (remember to escape any parameter data)
 
-* `curl -k --request GET https://host:port/`
-* `curl -k --request GET https://host:port/vrsverify/?vrsnum=1000`
-* `curl -k --request GET https://host:port/getallvrsrecs`
-* `curl -k -H "Content-Type: application/json" -X PUT -d '{"vrsnum":"1000","fieldname":"last_name","fieldvalue":"Spacey"}'  https://host:port/vrsupdate`
-* `curl -k -H "Content-Type: application/json" -X PUT -d '{"vrs":1111111111,"username":"someuser","password":"somepassword","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' https://host:port/addVrsRec`
-* `curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "1112223333", "password": "somepassword", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' https://host:port/updateVrsRec`
+* `curl -k --request GET "https://host:port/"`
+* `curl -k --request GET "https://host:port/vrsverify/?vrsnum=1000"`
+* `curl -k --request GET "https://host:port/getallvrsrecs"`
+* `curl -k -H "Content-Type: application/json" -X PUT -d '{"vrsnum":"1000","fieldname":"last_name","fieldvalue":"Spacey"}'  "https://host:port/vrsupdate"`
+* `curl -k -H "Content-Type: application/json" -X PUT -d '{"vrs":1111111111,"username":"someuser","password":"somepassword","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' "https://host:port/addVrsRec"`
+* `curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "1112223333", "password": "somepassword", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' "https://host:port/updateVrsRec"`
 
 # SERVICE API
 
