@@ -12,19 +12,24 @@ var cfile = null;
 var itrsMode = "false";
 
 // Initialize log4js
-log4js.loadAppender('file');
 var logname = 'userver';
 log4js.configure({
-	appenders: [
-		{
-			type: 'dateFile',
-			filename: 'logs/' + logname + '.log',
-			alwaysIncludePattern: false,
-			maxLogSize: 20480,
-			backups: 10
-		}
-	]
-});
+  appenders: {
+    userver: {
+      type: 'dateFile',
+      filename: 'logs/' + logname + '.log',
+      alwaysIncludePattern: false,
+      maxLogSize: 20480,
+      backups: 10
+    }
+  },
+  categories: {
+    default: {
+      appenders: ['userver'],
+      level: 'error'
+    }
+  }
+})
 
 // Get the name of the config file from the command line (optional)
 nconf.argv().env();
@@ -46,7 +51,7 @@ try {
     process.exit(1);
 }
 
-var logger = log4js.getLogger(logname);
+var logger = log4js.getLogger('userver');
 
 nconf.file({file: cfile});
 var configobj = JSON.parse(fs.readFileSync(cfile,'utf8'));
@@ -60,7 +65,7 @@ if (typeof(nconf.get('common:cleartext')) !== "undefined"  && nconf.get('common:
 }
 
 // Set log4js level from the config file
-logger.setLevel(getConfigVal('common:debug_level'));
+logger.level = getConfigVal('common:debug_level');
 logger.trace('TRACE messages enabled.');
 logger.debug('DEBUG messages enabled.');
 logger.info('INFO messages enabled.');
