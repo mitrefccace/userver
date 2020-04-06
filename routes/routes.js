@@ -72,7 +72,8 @@ var appRouter = function(app,connection,itrsMode) {
           } else if (rows.length === 1) {
             //success
             json = JSON.stringify(rows);
-            res.status(200).send({'message': 'success', 'data':rows, 'itrs_mode':itrsMode});
+            rows[0]["sipuri"] = "itrsmodefalse";
+	    res.status(200).send({'message': 'success', 'data':rows, 'itrs_mode':itrsMode});
           } else if (rows.length === 0) {
             return res.status(404).send({'message': 'Videophone number not found', 'itrs_mode':itrsMode});
           } else {
@@ -96,7 +97,7 @@ var appRouter = function(app,connection,itrsMode) {
           if (arr.length == 4 && arr[2] === 'sipuri' && arr[3].trim().length > 0) {
             //VERIFY SUCCESS
             console.log('ITRS VERIFIED ' + req.query.vrsnum + ' ? ... YES!');
-            res.status(200).send({"message":"success","data":[{"vrs":req.query.vrsnum,"username":"","password":"","first_name":"","last_name":"","address":"","city":"","state":"","zip_code":"","email":"","isAdmin":0}],"itrs_mode":"true"});
+            res.status(200).send({"message":"success","data":[{"vrs":req.query.vrsnum,"username":"","password":"","first_name":"","last_name":"","address":"","city":"","state":"","zip_code":"","email":"","isAdmin":0,"sipuri":arr[3].trim()}],"itrs_mode":"true"});
           } else {
             //ITRS VERIFY FAIL
             console.log('ITRS VERIFIED ' + req.query.vrsnum + ' ? ... NO!');
