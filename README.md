@@ -1,32 +1,40 @@
-![](images/acesmall.png)
-
 # ACE USERVER Project
+
+![USERVER](images/acesmall.png)
 
 The ACE USERVER is a server that provides a RESTful Web Service API to the ACE database for user information.
 
-#### Note: Data in this README is fake. Data included here is for documentation purposes only.
+> Note: Data in this README is fake.\
+> Data included here is for documentation purposes only.
 
-### SSL Configuration
+## SSL Configuration
 
-1. ACE software uses SSL which requires a valid key and certificate
-1. The location of the SSL key and certificate is specified in the ~/dat/config.json by using the common:https:certificate and common:https:private_key parameters in the form of folder/file (e.g., /home/centos/ssl/mycert.pem and /home/centos/ssl/mykey.pem)
-1. Additional information can be found in the ACE Direct Platform Release document
+1. ACE software uses SSL which requires a valid key and certificate.
+1. The location of the SSL key and certificate is specified in the `dat/config.json` by using the `common:https:certificate` and `common:https:private_key` parameters in the form of folder/file (e.g., `/home/centos/ssl/mycert.pem` and `/home/centos/ssl/mykey.pem`).
+1. Additional information can be found in the ACE Direct Platform Release documentation.
 
 ### Getting Started
+
 To install userver, follow the README.md file in the autoinstall folder. The instructions for manual install are also provided below for reference.
+
 1. Clone this repository
 1. Download and install [Node.js](https://nodejs.org/en/)
-1. Install the required Node.js modules: cd into the userver directory, run `npm install`
-1. From the command line:
-    * cd userver
-    * npm install
-    * npm install apidoc -g
-    * apidoc -i routes/ -o apidoc/
-    * node app.js
+1. Install the required Node.js modules: cd into the userver directory, run `npm run build`
+1. From the command line, generate docs:
+
+  ```shell
+  $  npm install apidoc -g
+  $
+  $  apidoc -i routes/ -o apidoc/
+  $
+  ```
 
 #### Running the Server
 
-Usage: nodejs app.js [ port ]
+```bash
+Usage:
+nodejs app.js [ port ]
+```
 
 #### Testing the Server in AWS (remember to escape any parameter data)
 
@@ -37,59 +45,59 @@ Usage: nodejs app.js [ port ]
 * `curl -k -H "Content-Type: application/json" -X PUT -d '{"vrs":1111111111,"username":"someuser","password":"somepassword","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' "https://host:port/addVrsRec"`
 * `curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "1112223333", "password": "somepassword", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' "https://host:port/updateVrsRec"`
 
-# SERVICE API
+## SERVICE API
 
 ## vrsverify
 
 _Verify a VRS number._
 
-### URL
+### URL vrsverify
 
-_/vrsverify/:vrsnum_
+`/vrsverify/:vrsnum`
 
-### Method
+### Method vrsverify
 
 `GET`
 
-### URL Params
+### URL Params vrsverify
 
-#### Required
+#### Required vrsverify
 
 `vrsnum=[integer]`
 
-#### Optional
+#### Optional vrsverify
 
-_None_
+None
 
-### Data Params
+### Data Params vrsverify
 
-_None_
+None
 
-### Success Response
+### Success Response vrsverify
 
 Code: 200
 
 Content:
 
-```
+```bash
 {
-	"message": "success",
-	"data": [{
-		"vrs": 1000,
-		"username": "someuser",
-		"password": "somepassword",
-		"first_name": "Rick",
-		"last_name": "Grimes",
-		"address": "1 Walking Way",
-		"city": "Eatontown",
-		"state": "NJ",
-		"zip_code": "07724",
-		"email": "root@comp.org"
-	}]
+  "message": "success",
+  "data": [{
+    "vrs": 1000,
+    "username": "someuser",
+    "password": "somepassword",
+    "first_name": "Rick",
+    "last_name": "Grimes",
+    "address": "1 Walking Way",
+    "city": "Eatontown",
+    "state": "NJ",
+    "zip_code": "07724",
+    "email": "root@comp.org"
+  }]
 }
 ```
 
-### Error Response
+### Error Response vrsverify
 
 Code: 400 BAD REQUEST, Content: `{"message": "missing vrsnum"}`
 
@@ -99,7 +107,7 @@ Code: 404 NOT FOUND, Content: `{"message": "you may not modify this field"}`
 
 Code: 501 NOT IMPLEMENTED, Content: `{"message": "records returned is not 1"}`
 
-### Sample Call
+### Sample Call vrsverify
 
 `curl -k --request GET https://host:port/vrsverify/?vrsnum=1000`
 
@@ -111,79 +119,79 @@ _Get all the VRS records in the user database._
 
 ### URL
 
-_/getallvrsrecs_
+`/getallvrsrecs`
 
-### Method
+### Method getallvrsrecs
 
 `GET`
 
-### URL Params
+### URL Params getallvrsrecs
 
-#### Required
+#### Required getallvrsrecs
 
-_None_
+None
 
-#### Optional
+#### Optional getallvrsrecs
 
-_None_
+None
 
-### Data Params
+### Data Params getallvrsrecs
 
-_None_
+None
 
-### Success Response
+### Success Response getallvrsrecs
 
 Code: 200
 
 Content:
 
-```
+```bash
 {
-	"message": "success",
-	"data": [{
-		"vrs": 1000,
-		"username": "someuser",
-		"password": "somepassword",
-		"first_name": "Rick",
-		"last_name": "Grimes",
-		"address": "1 Walking Way",
-		"city": "Eatontown",
-		"state": "NJ",
-		"zip_code": "07724",
-		"email": "root@comp.org"
-	}, {
-		"vrs": 1001,
-		"username": "someuser",
-		"password": "somepassword",
-		"first_name": "John",
-		"last_name": "Smith",
-		"address": "10 Industrial Way",
-		"city": "Eatontown",
-		"state": "NJ",
-		"zip_code": "07724",
-		"email": "jsmith@gmail.com"
-	}, ..., {
-		"vrs": 1006,
-		"username": "someuser",
-		"password": "somepassword",
-		"first_name": "Root",
-		"last_name": "Beer",
-		"address": "1 Supermarket Way",
-		"city": "Freehold",
-		"state": "NJ",
-		"zip_code": "07728",
-		"email": "root@root.com"
-	}]
+  "message": "success",
+  "data": [{
+    "vrs": 1000,
+    "username": "someuser",
+    "password": "somepassword",
+    "first_name": "Rick",
+    "last_name": "Grimes",
+    "address": "1 Walking Way",
+    "city": "Eatontown",
+    "state": "NJ",
+    "zip_code": "07724",
+    "email": "root@comp.org"
+  }, {
+    "vrs": 1001,
+    "username": "someuser",
+    "password": "somepassword",
+    "first_name": "John",
+    "last_name": "Smith",
+    "address": "10 Industrial Way",
+    "city": "Eatontown",
+    "state": "NJ",
+    "zip_code": "07724",
+    "email": "jsmith@gmail.com"
+  }, ..., {
+    "vrs": 1006,
+    "username": "someuser",
+    "password": "somepassword",
+    "first_name": "Root",
+    "last_name": "Beer",
+    "address": "1 Supermarket Way",
+    "city": "Freehold",
+    "state": "NJ",
+    "zip_code": "07728",
+    "email": "root@root.com"
+  }]
 }
 ```
 
-### Error Response
+### Error Response getallvrsrecs
 
 Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
 Code: 204 NO CONTENT, Content: `{"message": "vrs number not found"}`
 
-### Sample Call
+### Sample Call getallvrsrecs
 
 `curl -k --request GET https://host:port/getallvrsrecs`
 
@@ -193,39 +201,39 @@ Code: 204 NO CONTENT, Content: `{"message": "vrs number not found"}`
 
 _This is just a test service to quickly check the connection._
 
-### URL
+### URL Test Service
 
-_/_
+`/`
 
-### Method
+### Method Test Service
 
 `GET`
 
-### URL Params
+### URL Params Test Service
 
-_None_
+None
 
-#### Required
+#### Required Test Service
 
-_None_
+None
 
-#### Optional
+#### Optional Test Service
 
-_None_
+None
 
-### Data Params
+### Data Params Test Service
 
-_None_
+None
 
-### Success Response
+### Success Response Test Service
 
 Code: 200, Content: `{"message":"Hello world."}`
 
-### Error Response
+### Error Response Test Service
 
-_None_
+None
 
-### Sample Call
+### Sample Call Test Service
 
 `curl -k --request GET https://host:port/`
 
@@ -235,54 +243,54 @@ _None_
 
 _Add a new VRS record in the user database._
 
-### URL
+### URL addVrsRec
 
-_/addVrsRec_
+`/addVrsRec`
 
-### Method
+### Method addVrsRec
 
 `PUT`
 
-### URL Params
+### URL Params addVrsRec
 
-#### Required
+#### Required addVrsRec
 
-_None_
+None
 
-#### Optional
+#### Optional addVrsRec
 
-_None_
+None
 
-### Data Params
+### Data Params addVrsRec
 
 _Every field must have a corresponding value, except for VRS which is automatically incremented._
 
-```
+```bash
 {
-	"username": "someuser",
-	"password": "somepassword",
-	"first_name": "Oprah",
-	"last_name": "Winfrey",
-	"address": "1 Billionaire Way",
-	"city": "Beverly Hills",
-	"state": "CA",
-	"zip_code": "90210",
-	"email": "oprah@mail.com",
-	"isAdmin": 0
+  "username": "someuser",
+  "password": "somepassword",
+  "first_name": "Oprah",
+  "last_name": "Winfrey",
+  "address": "1 Billionaire Way",
+  "city": "Beverly Hills",
+  "state": "CA",
+  "zip_code": "90210",
+  "email": "oprah@mail.com",
+  "isAdmin": 0
 }
 ```
 
-### Success Response
+### Success Response addVrsRec
 
 Code: 200, Content: `{"message":"success"}`
 
-### Error Response
+### Error Response addVrsRec
 
 Code: 400 BAD REQUEST, Content: `{"message":"Missing required field(s)"}`
 
 Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
-### Sample Call
+### Sample Call addVrsRec
 
 `curl -k -H "Content-Type: application/json" -X PUT -d '{"username":"someuser1","somepassword1":"password1","first_name":"Oprah","last_name":"Winfrey","address":"1 Billionaire Way","city":"Beverly Hills","state":"CA","zip_code":"90210","email":"oprah@mail.com","isAdmin":0}' https://host:port/addVrsRec`
 
@@ -292,53 +300,53 @@ Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
 _Update a VRS record in the user database._
 
-### URL
+### URL updateVrsRec
 
-_/updateVrsRec_
+`/updateVrsRec`
 
-### Method
+### Method updateVrsRec
 
 `POST`
 
-### URL Params
+### URL Params updateVrsRec
 
-#### Required
+#### Required updateVrsRec
 
-_None_
+None
 
-#### Optional
+#### Optional updateVrsRec
 
-_None_
+None
 
-### Data Params
+### Data Params updateVrsRec
 
 _Must input a value for each field except for username and email, which cannot be changed._
 
-```
+```bash
 {
-	"vrs": "1112223333",
-	"password": "somepassword",
-	"first_name": "Clint",
-	"last_name": "Eastwood",
-	"address": "10 Hollywood Blvd",
-	"city": "Los Angeles",
-	"state": "CA",
-	"zip_code": "94821",
-	"isAdmin": 0
+  "vrs": "1112223333",
+  "password": "somepassword",
+  "first_name": "Clint",
+  "last_name": "Eastwood",
+  "address": "10 Hollywood Blvd",
+  "city": "Los Angeles",
+  "state": "CA",
+  "zip_code": "94821",
+  "isAdmin": 0
 }
 ```
 
-### Success Response
+### Success Response updateVrsRec
 
 Code: 200, Content: `{"message":"success"}`
 
-### Error Response
+### Error Response updateVrsRec
 
 Code: 400 BAD REQUEST, Content: `{"message":"Missing required field(s)"}`
 
 Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
-### Sample Call
+### Sample Call updateVrsRec
 
 `curl -k -H "Content-Type: application/json" -X POST -d '{"vrs": "1112223333", "password": "somepassword", "first_name": "Clint", "last_name": "Eastwood", "address": "10 Hollywood Blvd", "city": "Los Angeles", "state":"CA", "zip_code":"94821", "isAdmin":0}' https://host:port/updateVrsRec`
 
@@ -346,34 +354,34 @@ Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
 _Get a user record from the VRS database._
 
-### URL
+### URL getuserinfo
 
-_/getuserinfo_
+`/getuserinfo`
 
-### Method
+### Method getuserinfo
 
 `GET`
 
-### URL Params
+### URL Params getuserinfo
 
-#### Required
+#### Required getuserinfo
 
-_username_
+`username`
 
-#### Optional
+#### Optional getuserinfo
 
-_None_
+None
 
-### Success Response
+### Success Response getuserinfo
 
 Code: 200, Content: `{ "message": "success", "data": [ { "vrs": 0, "first_name": "First", "last_name": "Last", "address": "1 Some Street", "city": "Some City", "state": "XX", "zip_code": "00000", "email": "someuser@mail.com", "isAdmin": 0 } ]}`
 
-### Error Response
+### Error Response getuserinfo
 
 Code: 400 BAD REQUEST, Content: `{"message":"missing username"}`
 
 Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
-### Sample Call
+### Sample Call getuserinfo
 
 `curl -k --request GET https://host:port/getuserinfo?username=someuser`
