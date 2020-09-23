@@ -386,4 +386,3 @@ Code: 500 INTERNAL SERVER ERROR, Content: `{"message": "mysql error"}`
 
 `curl -k --request GET https://host:port/getuserinfo?username=someuser`
 
-
