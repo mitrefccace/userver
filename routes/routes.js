@@ -359,7 +359,64 @@ var appRouter = function(app,connection,itrsMode) {
 				}
 			});
 		}
-	});
+  });
+  
+  //For fileshare
+  app.post('/storeFileInfo', function(req, res){
+    let vrs = req.body.vrs;
+    let originalFileName = req.body.originalFilename;
+    let filePath = req.body.filepath;
+    let fileName = req.body.filename;
+    let mimetype = req.body.mimetype;
+    //TODO Insert into database
+    var query = 'INSERT INTO file_uploads (vrs, original_filename, filename, filepath, mimetype) VALUES (?,?,?,?,?)';
+    var params = [vrs, originalFileName, fileName, filePath, mimetype];
+    console.log("Param is " + params);
+    connection.query(query, params, function(err, result){
+      if(err){
+        return res.status(500).send({'message': 'MySQL error'});
+      }
+      else {
+        return res.status(200).send({'message': 'Success!'});
+      }
+    });
+  })
+
+  app.get('/storeFileInfo', function(req, res){
+    console.log('About to return' + req.query.documentID);
+    var query = 'SELECT original_filename, filepath FROM file_uploads WHERE pk_file_id=?;';
+    var params = [req.query.documentID];
+    console.log("Param is " + params);
+    connection.query(query, params, function(err, result){
+      if(err || result.length < 1){
+        return res.status(500).send({'message': 'MySQL error'});
+      }
+      else {
+        return res.status(200).send({
+          'message': 'Success', 
+          'filename' : result[0].original_filename, 
+          'filepath' : result[0].filepath
+        });
+      }
+    });
+  })  
+
+  app.get('/fileListByVRS', function(req, res){
+    var query = 'SELECT original_filename, pk_file_id AS id FROM file_uploads WHERE vrs=?;';
+    var params = [req.query.vrs];
+    console.log("Param is " + params);
+    connection.query(query, params, function(err, result){
+      if(err){
+        return res.status(500).send({'message': 'MySQL error'});
+      }
+      else {
+        return res.status(200).send({
+          'message': 'Success', 
+          'result' : result
+        });
+      }
+    });
+  }) 
 
 };
 
